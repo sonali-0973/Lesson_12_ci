@@ -1,0 +1,25 @@
+name: Backend PR
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.14.7'
+
+      - name: Compile Python
+        run: python -m compileall backend-api/app
+
+      - name: Build backend image
+        run: docker build -t backend-api -f backend-api/app/Dockerfile backend-api
